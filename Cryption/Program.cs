@@ -1,25 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+using Cryption.services;
+using Microsoft.OpenApi.Models;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace Cryption
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public class Program
+    {
+        public static void Main()
+        {
+            var builder = WebApplication.CreateBuilder();
+
+            
+            builder.Services.AddScoped<crypticservices>();
+            builder.Services.AddControllers();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "omers api", Version = "v1" });
+            });
+
+            var app = builder.Build();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "omers api");
+                options.RoutePrefix = string.Empty;
+            });
+
+            app.MapControllers();
+            app.Run();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
