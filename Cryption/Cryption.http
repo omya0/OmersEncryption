@@ -1,0 +1,6 @@
+@Cryption_HostAddress = http://localhost:5269
+
+GET {{Cryption_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
